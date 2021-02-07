@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+          integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+          crossorigin="anonymous"/>
+    <style>
+        i {
+            font-size: 50px;
+        }
+
+        .golden {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars">
+        <i id="first" class="fas fa-star"></i>
+        <i id="second" class="fas fa-star"></i>
+        <i id="third" class="fas fa-star"></i>
+        <i id="fourth" class="fas fa-star"></i>
+        <i id="fifth" class="fas fa-star"></i>
+    </div>
+    <!-- Задание. Используя заготовку, сделайте чтобы при наведении на вторую звезду
+    подсвечивались первая и вторая звезды. При наведени на третью звезду подсвечивались
+    первая, вторая и третья звезды, и т.д.
+    mouseover - это событие срабатывает когда мы наводим на элемент.
+    mouseout - это событие срабатывает когда мы перестаем наводить на элемент.
+    Вы можете пойти более продвинутым путем, и получать предыдущий элемент
+    например с помощью https://mzl.la/3a4SPlR
+    -->
+
+    <script>
+
+      /**
+       * Мне показалось, что такой подход будет не то, что проще, а лучше.
+       * Я реализовал в качестве практики подход предложенный в данном задании, но пошел дальше и собрал все звезды
+       * в один список, чтобы каждой звезде добавить event listner, но позже, подумал,
+       * а почему бы не повесить прослушку события, на контейнер, и вот что из этого вышло.
+       */
+      let starsContainer = document.querySelector('.stars')
+      let goldenClass = 'golden'
+
+      let switchStar = (star, isOver = false) => {
+        if (isOver && !star.classList.contains(goldenClass)) {
+          star.classList.add(goldenClass)
+        } else {
+          star.classList.remove(goldenClass)
+        }
+      }
+
+      let handlerStarsBehaviour = (event) => {
+        let nthStar = event.target
+        let isOver = (event.type === 'mouseover')
+
+        if (nthStar === starsContainer) {
+          return;
+        }
+
+        let previousStar = nthStar.previousElementSibling;
+        while (previousStar) {
+          switchStar(previousStar, isOver);
+          previousStar = previousStar.previousElementSibling;
+        }
+
+        switchStar(nthStar, isOver);
+      }
+
+      starsContainer.addEventListener('mouseout', handlerStarsBehaviour)
+      starsContainer.addEventListener('mouseover', handlerStarsBehaviour)
+    </script>
+</body>
+</html>
